@@ -29,7 +29,11 @@ public class TwitterProducer {
   private Client client;
   private KafkaProducer<String, String> producer;
   private BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(30);
-  private List<String> trackTerms = Lists.newArrayList("indonesia", "2020");
+  private List<String> trackTerms;
+
+  public TwitterProducer(List<String> trackTerms) {
+    this.trackTerms = trackTerms;
+  }
 
   public Client createTwitterClient(BlockingQueue<String> msgQueue){
     Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);

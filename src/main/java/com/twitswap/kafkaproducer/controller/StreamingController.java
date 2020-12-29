@@ -23,6 +23,7 @@ import reactor.core.scheduler.Schedulers;
 public class StreamingController {
   private AsyncService asyncService;
   private CommandExecutor commandExecutor;
+  private TwitterProducer twitterProducer;
 
   @Autowired
   public StreamingController(CommandExecutor commandExecutor) {
@@ -34,6 +35,10 @@ public class StreamingController {
     this.asyncService = asyncService;
   }
 
+  public void setTwitterProducer(TwitterProducer twitterProducer) {
+    this.twitterProducer = twitterProducer;
+  }
+
   @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
   public Mono<Response<StartStreamingResponse>> startStreaming(@RequestParam(required = false) boolean stop, @RequestBody(required = false) StartStreamingRequest request) {
     if (stop) return commandExecutor.execute(StopStreamingCommand.class, true)
@@ -41,7 +46,8 @@ public class StreamingController {
             .map(ResponseHelper::ok)
             .subscribeOn(Schedulers.elastic());
 
-    asyncService.process(() -> new TwitterProducer().run());
+    setTwitterProducer(new TwitterProducer(request.getTags()));
+    asyncService.process(() -> this.twitterProducer.run());
 
     return commandExecutor.execute(StartStreamingCommand.class, request)
             .log("#startStreaming - start - Successfully executing the command")
