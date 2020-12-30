@@ -41,10 +41,14 @@ public class StreamingController {
 
   @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
   public Mono<Response<StartStreamingResponse>> startStreaming(@RequestParam(required = false) boolean stop, @RequestBody(required = false) StartStreamingRequest request) {
-    if (stop) return commandExecutor.execute(StopStreamingCommand.class, true)
-            .log("#startStreaming - stop - Successfully executing the command")
-            .map(ResponseHelper::ok)
-            .subscribeOn(Schedulers.elastic());
+    if (stop) {
+      asyncService.stop();
+
+      return commandExecutor.execute(StopStreamingCommand.class, true)
+              .log("#startStreaming - stop - Successfully executing the command")
+              .map(ResponseHelper::ok)
+              .subscribeOn(Schedulers.elastic());
+    }
 
     setTwitterProducer(new TwitterProducer(request.getTags()));
     asyncService.process(() -> this.twitterProducer.run());

@@ -6,10 +6,12 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Service
 public class AsyncService {
   private ExecutorService executorService;
+  private Future<?> future;
 
   @PostConstruct
   private void create() {
@@ -17,9 +19,12 @@ public class AsyncService {
   }
 
   public void process(Runnable operation) {
-    executorService.submit(operation);
+    this.future = executorService.submit(operation);
   }
 
+  public void stop() {
+    this.future.cancel(true);
+  }
 
   @PreDestroy
   private void destroy() {
