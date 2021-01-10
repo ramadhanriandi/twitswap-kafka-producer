@@ -1,7 +1,6 @@
 package com.twitswap.kafkaproducer.producer;
 
-import com.google.common.collect.Lists;
-import com.twitswap.kafkaproducer.config.KafkaConfig;
+import com.twitswap.kafkaproducer.config.KafkaProducerConfig;
 import com.twitswap.kafkaproducer.config.TwitterConfig;
 import com.twitter.hbc.ClientBuilder;
 import com.twitter.hbc.core.Client;
@@ -57,23 +56,23 @@ public class TwitterProducer {
 
   private KafkaProducer<String, String> createKafkaProducer() {
     Properties prop = new Properties();
-    prop.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConfig.BOOTSTRAPSERVERS);
+    prop.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaProducerConfig.BOOTSTRAPSERVERS);
     prop.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
     prop.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
     prop.setProperty(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
-    prop.setProperty(ProducerConfig.ACKS_CONFIG, KafkaConfig.ACKS_CONFIG);
-    prop.setProperty(ProducerConfig.RETRIES_CONFIG, KafkaConfig.RETRIES_CONFIG);
-    prop.setProperty(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, KafkaConfig.MAX_IN_FLIGHT_CONN);
+    prop.setProperty(ProducerConfig.ACKS_CONFIG, KafkaProducerConfig.ACKS_CONFIG);
+    prop.setProperty(ProducerConfig.RETRIES_CONFIG, KafkaProducerConfig.RETRIES_CONFIG);
+    prop.setProperty(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, KafkaProducerConfig.MAX_IN_FLIGHT_CONN);
 
-    prop.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG, KafkaConfig.COMPRESSION_TYPE);
-    prop.setProperty(ProducerConfig.LINGER_MS_CONFIG, KafkaConfig.LINGER_CONFIG);
-    prop.setProperty(ProducerConfig.BATCH_SIZE_CONFIG, KafkaConfig.BATCH_SIZE);
+    prop.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG, KafkaProducerConfig.COMPRESSION_TYPE);
+    prop.setProperty(ProducerConfig.LINGER_MS_CONFIG, KafkaProducerConfig.LINGER_CONFIG);
+    prop.setProperty(ProducerConfig.BATCH_SIZE_CONFIG, KafkaProducerConfig.BATCH_SIZE);
 
     return new KafkaProducer<>(prop);
   }
 
-  public void run(){
+  public void run() {
     logger.info("Setting up");
 
     client = createTwitterClient(msgQueue);
@@ -101,7 +100,7 @@ public class TwitterProducer {
 
       if (msg != null) {
         logger.info(msg);
-        producer.send(new ProducerRecord<>(KafkaConfig.TOPIC, null, msg), (recordMetadata, e) -> {
+        producer.send(new ProducerRecord<>(KafkaProducerConfig.TOPIC, null, msg), (recordMetadata, e) -> {
           if (e != null) {
             logger.error("Some error OR something bad happened", e);
           }

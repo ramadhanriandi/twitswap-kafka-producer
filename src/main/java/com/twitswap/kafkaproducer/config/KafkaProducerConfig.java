@@ -1,6 +1,6 @@
 package com.twitswap.kafkaproducer.config;
 
-public class KafkaConfig {
+public class KafkaProducerConfig {
   public static final String BOOTSTRAPSERVERS  = "127.0.0.1:9092";
   public static final String TOPIC = "twitter-topic";
   public static final String ACKS_CONFIG = "all";
