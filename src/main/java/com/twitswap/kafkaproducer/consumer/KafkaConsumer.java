@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 public class KafkaConsumer {
   @KafkaListener(topics = "popular-hashtag-topic", groupId = "group_id")
   public void consume(String message) {
+    System.out.println("-------- new message");
     System.out.println(message);
   }
 }

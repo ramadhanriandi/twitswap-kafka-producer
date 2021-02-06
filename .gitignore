@@ -33,3 +33,4 @@ build/
 .vscode/
 
 **/config/TwitterConfig.java
+**/resources/application.properties
