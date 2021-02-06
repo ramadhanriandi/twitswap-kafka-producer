@@ -13,8 +13,7 @@ public class StopStreamingCommandImpl implements StopStreamingCommand {
   @Override
   public Mono<StartStreamingResponse> execute(Boolean stop) {
     System.out.println("Stop Streaming Gan");
-    Mono<StartStreamingResponse> response = Mono.just(new StartStreamingResponse(true, "Stop streaming successfully"));
 
-    return response;
+    return Mono.just(new StartStreamingResponse(true, "Stop streaming successfully"));
   }
 }

@@ -12,8 +12,7 @@ import reactor.core.publisher.Mono;
 public class StartStreamingCommandImpl implements StartStreamingCommand {
   @Override
   public Mono<StartStreamingResponse> execute(StartStreamingRequest request) {
-    Mono<StartStreamingResponse> response = Mono.just(new StartStreamingResponse(true, "Start streaming successfully"));
 
-    return response;
+    return Mono.just(new StartStreamingResponse(true, "Start streaming successfully"));
   }
 }
