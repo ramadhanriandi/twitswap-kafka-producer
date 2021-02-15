@@ -12,8 +12,6 @@ import reactor.core.publisher.Mono;
 public class StopStreamingCommandImpl implements StopStreamingCommand {
   @Override
   public Mono<StartStreamingResponse> execute(Boolean stop) {
-    System.out.println("Stop Streaming Gan");
-
     return Mono.just(new StartStreamingResponse(true, "Stop streaming successfully"));
   }
 }
