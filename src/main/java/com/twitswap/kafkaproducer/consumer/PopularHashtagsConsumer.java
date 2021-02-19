@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class KafkaConsumer {
+public class PopularHashtagsConsumer {
   @Autowired
   private PopularHashtagsRepository popularHashtagsRepository;
 

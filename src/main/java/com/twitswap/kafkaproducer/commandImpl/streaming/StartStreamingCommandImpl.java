@@ -15,4 +15,3 @@ public class StartStreamingCommandImpl implements StartStreamingCommand {
     return Mono.just(new StartStreamingResponse(true, "Start streaming successfully"));
   }
 }
- 

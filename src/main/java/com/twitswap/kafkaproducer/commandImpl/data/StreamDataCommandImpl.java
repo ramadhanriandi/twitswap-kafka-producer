@@ -2,8 +2,10 @@ package com.twitswap.kafkaproducer.commandImpl.data;
 
 import com.twitswap.kafkaproducer.command.data.StreamDataCommand;
 import com.twitswap.kafkaproducer.entity.PopularHashtags;
+import com.twitswap.kafkaproducer.entity.TweetCount;
 import com.twitswap.kafkaproducer.model.response.StreamDataResponse;
 import com.twitswap.kafkaproducer.repository.PopularHashtagsRepository;
+import com.twitswap.kafkaproducer.repository.TweetCountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +17,18 @@ public class StreamDataCommandImpl implements StreamDataCommand {
   @Autowired
   private PopularHashtagsRepository popularHashtagsRepository;
 
+  @Autowired
+  private TweetCountRepository tweetCountRepository;
+
   @Override
   public Mono<StreamDataResponse> execute(Boolean request) {
     StreamDataResponse streamDataResponse = new StreamDataResponse();
 
     PopularHashtags popularHashtagsResponse = popularHashtagsRepository.findTopByOrderByCreatedAtDesc();
     streamDataResponse.setPopularHashtags(popularHashtagsResponse);
+
+    TweetCount tweetCountResponse = tweetCountRepository.findTopByOrderByCreatedAtDesc();
+    streamDataResponse.setTweetCount(tweetCountResponse);
 
     return Mono.just(streamDataResponse);
   }
